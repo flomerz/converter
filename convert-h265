@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+	echo "error: arguments not set"
+	echo "call $0 {input file} {output file}"
+    echo
+	exit
+fi
+
+ffmpeg -i $1 -c:v libx265 -strict experimental -preset slow -x265-params crf=23 $2

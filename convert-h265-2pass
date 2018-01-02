@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ $# -ne 3 ]; then
+	echo "error: arguments not set"
+	echo "call $0 {bitrate} {input} {output file}"
+    echo
+	echo "bitrate: 2600k"
+	echo
+	echo "(200 MiB * 8192 [converts MiB to kBit]) / 600 seconds = ~2730 kBit/s total bitrate"
+	echo "2730 - 128 kBit/s (desired audio bitrate) = 2602 kBit/s video bitrate"
+	echo
+	exit
+fi
+
+ffmpeg -y -i "$2" -c:v libx265 -strict experimental -preset slow -b:v $1 -pass 1 -f mp4 /dev/null && \
+ffmpeg -i "$2" -c:v libx265 -strict experimental -preset slow -b:v $1 -pass 2 $3
